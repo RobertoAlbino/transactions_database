@@ -2,7 +2,8 @@ version: '3.5'
 
 services:
 
-  postgres:
+  transactions-database:
+    container_name: transactions-database
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -12,21 +13,22 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - postgres
+      - transactions-network
     restart: unless-stopped
   
-  flyway:
+  transactions-flyway:
+    container_name: transactions-flyway
     image: flyway/flyway:9.7.0
     environment:
       - FLYWAY_EDITION=community
-    command: -url=jdbc:postgresql://postgres:5432/postgres -schemas=${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} -connectRetries=50 migrate
+    command: -url=jdbc:postgresql://transactions-database:5432/${POSTGRES_DB} -schemas=${POSTGRES_DB} -user=${POSTGRES_USER} -password=${POSTGRES_PASSWORD} -connectRetries=50 migrate
     volumes:
       - ./migrations:/flyway/sql
     depends_on:
-      - postgres
+      - transactions-database
     networks:
-      - postgres
+      - transactions-network
 
 networks:
-  postgres:
+  transactions-network:
     driver: bridge

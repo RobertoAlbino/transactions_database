@@ -1,4 +1,0 @@
-CREATE TABLE Accounts (
-    Account_ID BIGSERIAL NOT NULL PRIMARY KEY,
-    Document_Number BIGINT NOT NULL
-);
