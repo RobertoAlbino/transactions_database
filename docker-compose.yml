@@ -13,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - transactions-network
+      - pismo-network
     restart: unless-stopped
   
   transactions-flyway:
@@ -27,8 +27,8 @@ services:
     depends_on:
       - transactions-database
     networks:
-      - transactions-network
+      - pismo-network
 
 networks:
-  transactions-network:
-    driver: bridge
+  pismo-network:
+    external: true
